@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}Sign In • STUDYHUB{% endblock %}
+{% block content %}
+<div class="auth-wrap"><div class="auth-card">
+  <div class="auth-icon">→</div><h1>Welcome back</h1><p>Sign in to continue learning.</p>
+  <form method="post">
+    <label>Email</label><input type="email" name="email" required placeholder="you@example.com">
+    <label>Password</label><input type="password" name="password" required placeholder="Your password">
+    <button class="btn full">Sign In</button>
+  </form>
+  <p class="switch">New to STUDYHUB? <a href="{{ url_for('signup') }}">Create account</a></p>
+</div></div>
+{% endblock %}

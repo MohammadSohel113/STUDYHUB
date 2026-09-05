@@ -1,0 +1,325 @@
+{% extends "base.html" %}
+
+{% block title %}{{ lesson_title }} • STUDYHUB{% endblock %}
+
+{% block content %}
+
+<style>
+.lesson-page {
+    max-width: 950px;
+    margin: 0 auto;
+    padding: 50px 20px 80px;
+}
+
+.lesson-back {
+    display: inline-block;
+    margin-bottom: 25px;
+    color: #8fa1b7;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.lesson-back:hover {
+    color: #5eead4;
+}
+
+.lesson-header {
+    background: linear-gradient(135deg, #0d1929, #10243a);
+    border: 1px solid #20334d;
+    border-radius: 22px;
+    padding: 35px;
+    margin-bottom: 25px;
+}
+
+.lesson-number {
+    color: #5eead4;
+    font-size: 13px;
+    font-weight: 900;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+.lesson-header h1 {
+    font-size: 42px;
+    margin: 10px 0;
+    color: #ffffff;
+}
+
+.lesson-header p {
+    color: #9fb0c6;
+    margin: 0;
+}
+
+.lesson-content {
+    background: #0d1929;
+    border: 1px solid #20334d;
+    border-radius: 22px;
+    padding: 35px;
+    color: #e8eef8;
+    line-height: 1.8;
+}
+
+.lesson-content h2 {
+    color: #ffffff;
+    margin-top: 25px;
+    margin-bottom: 15px;
+}
+
+.lesson-content h3 {
+    color: #5eead4;
+    margin-top: 30px;
+}
+
+.lesson-content p {
+    color: #c3cfdd;
+    font-size: 16px;
+}
+
+.lesson-content ul {
+    color: #c3cfdd;
+    padding-left: 25px;
+}
+
+.lesson-content li {
+    margin: 8px 0;
+}
+
+.lesson-content pre {
+    background: #07111f;
+    border: 1px solid #243851;
+    border-radius: 14px;
+    padding: 20px;
+    overflow-x: auto;
+    margin: 20px 0;
+}
+
+.lesson-content code {
+    color: #b9d7ff;
+    font-family: Consolas, Monaco, monospace;
+    font-size: 14px;
+    white-space: pre;
+}
+
+.lesson-navigation {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+    margin-top: 25px;
+}
+
+.lesson-navigation a {
+    display: inline-block;
+    padding: 13px 20px;
+    border-radius: 12px;
+    background: #102036;
+    border: 1px solid #243851;
+    color: #ffffff;
+    text-decoration: none;
+    font-weight: 700;
+}
+
+.lesson-navigation a:hover {
+    border-color: #5eead4;
+    color: #5eead4;
+}
+
+.complete-form {
+    margin-top: 25px;
+}
+
+.complete-btn {
+    width: 100%;
+    padding: 15px;
+    border: 0;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #22c1c3, #4f46e5);
+    color: white;
+    font-size: 16px;
+    font-weight: 800;
+    cursor: pointer;
+}
+
+.complete-btn:hover {
+    opacity: 0.9;
+}
+
+@media(max-width:600px) {
+
+    .lesson-page {
+        padding: 30px 15px 60px;
+    }
+
+    .lesson-header,
+    .lesson-content {
+        padding: 24px;
+    }
+
+    .lesson-header h1 {
+        font-size: 30px;
+    }
+
+    .lesson-navigation {
+        flex-direction: column;
+    }
+
+    .lesson-navigation a {
+        text-align: center;
+    }
+}
+</style>
+
+
+<section class="lesson-page">
+
+    <a class="lesson-back"
+       href="{{ url_for('course', slug=slug) }}">
+        ← Back to {{ language[0] }}
+    </a>
+
+
+    <div class="lesson-header">
+
+        <div class="lesson-number">
+            Lesson {{ lesson_id + 1 }} of {{ total_lessons }}
+        </div>
+
+        <h1>
+            {{ lesson_title }}
+        </h1>
+
+        <p>
+            {{ language[0] }} • STUDYHUB
+        </p>
+
+    </div>
+
+
+    <article class="lesson-content">
+
+        {% if lesson is mapping %}
+
+            {% if lesson.get("intro") %}
+                <p>{{ lesson.get("intro") }}</p>
+            {% endif %}
+
+
+            {% if lesson.get("sections") %}
+
+                {% for section in lesson.get("sections") %}
+
+                    {% if section.get("title") %}
+                        <h2>{{ section.get("title") }}</h2>
+                    {% endif %}
+
+                    {% if section.get("text") %}
+                        <p>{{ section.get("text") }}</p>
+                    {% endif %}
+
+                    {% if section.get("points") %}
+
+                        <ul>
+
+                            {% for point in section.get("points") %}
+
+                                <li>{{ point }}</li>
+
+                            {% endfor %}
+
+                        </ul>
+
+                    {% endif %}
+
+                    {% if section.get("code") %}
+
+                        <pre><code>{{ section.get("code") }}</code></pre>
+
+                    {% endif %}
+
+                {% endfor %}
+
+            {% endif %}
+
+
+            {% if lesson.get("body") %}
+                {{ lesson.get("body") | safe }}
+            {% endif %}
+
+
+            {% if lesson.get("content") %}
+                <div>
+                    {{ lesson.get("content") | safe }}
+                </div>
+            {% endif %}
+
+
+        {% else %}
+
+            <p>{{ lesson }}</p>
+
+        {% endif %}
+
+    </article>
+
+
+    <div class="lesson-navigation">
+
+        {% if lesson_id > 0 %}
+
+            <a href="{{ url_for(
+                'lesson',
+                slug=slug,
+                lesson_id=lesson_id-1
+            ) }}">
+                ← Previous Lesson
+            </a>
+
+        {% else %}
+
+            <a href="{{ url_for('course', slug=slug) }}">
+                ← Course
+            </a>
+
+        {% endif %}
+
+
+        {% if lesson_id + 1 < total_lessons %}
+
+            <a href="{{ url_for(
+                'lesson',
+                slug=slug,
+                lesson_id=lesson_id+1
+            ) }}">
+                Next Lesson →
+            </a>
+
+        {% else %}
+
+            <a href="{{ url_for('course', slug=slug) }}">
+                Finish Course ✓
+            </a>
+
+        {% endif %}
+
+    </div>
+
+
+    <form
+        class="complete-form"
+        method="POST"
+        action="{{ url_for(
+            'complete_lesson',
+            slug=slug,
+            lesson_id=lesson_id
+        ) }}"
+    >
+
+        <button class="complete-btn" type="submit">
+            ✓ Mark Lesson Complete
+        </button>
+
+    </form>
+
+
+</section>
+
+{% endblock %}

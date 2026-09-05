@@ -1,0 +1,220 @@
+```html
+{% extends "base.html" %}
+
+{% block title %}Dashboard • STUDYHUB{% endblock %}
+
+{% block content %}
+
+<style>
+    .dashboard-page {
+        max-width: 1200px;
+        margin: auto;
+        padding: 45px 20px 70px;
+    }
+
+    .welcome {
+        background: linear-gradient(135deg, #0d1929, #10243a);
+        border: 1px solid #20334d;
+        border-radius: 24px;
+        padding: 35px;
+        margin-bottom: 30px;
+    }
+
+    .welcome small {
+        color: #5eead4;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+    }
+
+    .welcome h1 {
+        color: #fff;
+        font-size: 38px;
+        margin: 10px 0;
+    }
+
+    .welcome p {
+        color: #9fb0c6;
+        margin: 0;
+        font-size: 16px;
+    }
+
+    .section-title {
+        color: #fff;
+        font-size: 25px;
+        margin: 35px 0 20px;
+    }
+
+    .courses-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+    }
+
+    .course-card {
+        background: #0d1929;
+        border: 1px solid #20334d;
+        border-radius: 20px;
+        padding: 25px;
+        transition: 0.25s ease;
+    }
+
+    .course-card:hover {
+        transform: translateY(-5px);
+        border-color: #5eead4;
+        box-shadow: 0 12px 35px rgba(0,0,0,.25);
+    }
+
+    .course-icon {
+        width: 52px;
+        height: 52px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 14px;
+        background: #10243a;
+        color: #5eead4;
+        font-size: 22px;
+        font-weight: 900;
+        margin-bottom: 18px;
+    }
+
+    .course-card h3 {
+        color: #fff;
+        margin: 0 0 8px;
+        font-size: 21px;
+    }
+
+    .course-card p {
+        color: #8fa1b7;
+        line-height: 1.6;
+        font-size: 14px;
+        min-height: 45px;
+    }
+
+    .course-btn {
+        display: block;
+        width: 100%;
+        box-sizing: border-box;
+        text-align: center;
+        padding: 12px;
+        border-radius: 11px;
+        background: linear-gradient(135deg, #22c1c3, #4f46e5);
+        color: #fff;
+        text-decoration: none;
+        font-weight: 800;
+        transition: .2s;
+        margin-top: 20px;
+    }
+
+    .course-btn:hover {
+        opacity: .9;
+        transform: scale(1.01);
+    }
+
+    .empty-box {
+        background: #0d1929;
+        border: 1px solid #20334d;
+        border-radius: 20px;
+        padding: 35px;
+        text-align: center;
+        color: #9fb0c6;
+    }
+
+    @media (max-width: 900px) {
+        .courses-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+
+    @media (max-width: 600px) {
+        .dashboard-page {
+            padding: 30px 15px 50px;
+        }
+
+        .welcome {
+            padding: 25px;
+        }
+
+        .welcome h1 {
+            font-size: 29px;
+        }
+
+        .courses-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+
+<section class="dashboard-page">
+
+    <div class="welcome">
+
+        <small>STUDYHUB • LEARNING PLATFORM</small>
+
+        <h1>
+            Welcome,
+            {{ session.get("name", "Student") }} 👋
+        </h1>
+
+        <p>
+            Learn programming, complete lessons, take exams,
+            and earn certificates.
+        </p>
+
+    </div>
+
+    <h2 class="section-title">📚 My Courses</h2>
+
+    {% if languages %}
+
+    <div class="courses-grid">
+
+        {% for language in languages %}
+
+        <div class="course-card">
+
+            <div class="course-icon">
+                {{ language[0][0] | upper }}
+            </div>
+
+            <h3>
+                {{ language[0] }}
+            </h3>
+
+            <p>
+                Learn {{ language[0] }} from the basics
+                to important programming concepts.
+            </p>
+
+            <a
+                class="course-btn"
+                href="{{ url_for('course', slug=language[3]) }}"
+            >
+                Open Course →
+            </a>
+
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+    {% else %}
+
+    <div class="empty-box">
+
+        <h3>No courses available</h3>
+
+        <p>
+            Courses will appear here soon.
+        </p>
+
+    </div>
+
+    {% endif %}
+
+</section>
+
+{% endblock %}
+```

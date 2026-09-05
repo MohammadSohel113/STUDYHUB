@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block title %}{{ language[0] }} Exam • STUDYHUB{% endblock %}
+
+{% block content %}
+
+<section class="exam-page">
+
+  <a class="back" href="{{ url_for('course', slug=slug) }}">
+    ← Back to Course
+  </a>
+
+  <div class="section-title">
+    <span>FINAL EXAM</span>
+    <h1>{{ language[1] }} {{ language[0] }} Exam</h1>
+    <p>Answer all questions. Passing score is 60%.</p>
+  </div>
+
+  {% if score is not none %}
+    <div class="result {{ 'pass' if passed else 'fail' }}">
+      <strong>{{ score }}/{{ questions|length }}</strong>
+
+      <span>
+        {{ '🎉 Congratulations! Course exam passed.'
+        if passed
+        else 'Keep practicing and try again.' }}
+      </span>
+    </div>
+  {% endif %}
+
+
+  <form method="post" class="exam-form">
+
+    {% for q in questions %}
+
+      {# Save the question number before entering the options loop #}
+      {% set q_index = loop.index0 %}
+
+      <div class="question">
+
+        <h3>
+          {{ loop.index }}. {{ q[0] }}
+        </h3>
+
+        {% for option in q[1] %}
+
+          <label>
+            <input
+              type="radio"
+              name="q{{ q_index }}"
+              value="{{ loop.index0 }}"
+              required
+            >
+
+            {{ option }}
+
+          </label>
+
+        {% endfor %}
+
+      </div>
+
+    {% endfor %}
+
+
+    <button class="btn full" type="submit">
+      Submit Exam
+    </button>
+
+  </form>
+
+</section>
+
+{% endblock %}

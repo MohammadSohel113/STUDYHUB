@@ -1,0 +1,317 @@
+{% extends "base.html" %}
+
+{% block title %}{{ language[0] }} • STUDYHUB{% endblock %}
+
+{% block content %}
+
+<style>
+    .course-page {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 40px 20px 60px;
+    }
+
+    .course-header {
+        background: linear-gradient(135deg, #0f172a, #172554);
+        border: 1px solid #263852;
+        border-radius: 20px;
+        padding: 35px;
+        margin-bottom: 30px;
+        box-shadow: 0 15px 40px rgba(0,0,0,.18);
+    }
+
+    .course-icon {
+        font-size: 55px;
+        margin-bottom: 12px;
+    }
+
+    .course-header h1 {
+        margin: 0;
+        font-size: 34px;
+        color: #ffffff;
+    }
+
+    .course-header p {
+        margin: 10px 0 0;
+        color: #b7c4d6;
+        font-size: 16px;
+    }
+
+    .lessons-title {
+        color: #ffffff;
+        font-size: 25px;
+        margin-bottom: 18px;
+    }
+
+    .lessons-list {
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+    }
+
+    .lesson-card {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 15px;
+        background: #0f1b2d;
+        border: 1px solid #243650;
+        border-radius: 15px;
+        padding: 20px 22px;
+        transition: .2s ease;
+    }
+
+    .lesson-card:hover {
+        transform: translateY(-2px);
+        border-color: #4f46e5;
+        box-shadow: 0 8px 25px rgba(0,0,0,.18);
+    }
+
+    .lesson-left {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        min-width: 0;
+    }
+
+    .lesson-number {
+        width: 42px;
+        height: 42px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #17283d;
+        color: #7dd3fc;
+        font-weight: 700;
+        flex-shrink: 0;
+    }
+
+    .lesson-info h3 {
+        margin: 0;
+        color: #ffffff;
+        font-size: 17px;
+    }
+
+    .lesson-status {
+        display: block;
+        font-size: 13px;
+        font-weight: 600;
+        margin-top: 5px;
+    }
+
+    .completed-status {
+        color: #4ade80;
+    }
+
+    .pending-status {
+        color: #94a3b8;
+    }
+
+    .lesson-button {
+        text-decoration: none;
+        padding: 10px 18px;
+        border-radius: 10px;
+        background: linear-gradient(135deg, #4f46e5, #2563eb);
+        color: white;
+        font-weight: 600;
+        font-size: 14px;
+        white-space: nowrap;
+        transition: .2s ease;
+    }
+
+    .lesson-button:hover {
+        transform: translateY(-1px);
+        opacity: .92;
+    }
+
+    .completed-button {
+        background: #14532d;
+    }
+
+    .exam-box {
+        margin-top: 25px;
+        background: #111827;
+        border: 1px solid #263852;
+        border-radius: 18px;
+        padding: 25px;
+        text-align: center;
+    }
+
+    .exam-box h2 {
+        color: #ffffff;
+        margin-top: 0;
+    }
+
+    .exam-box p {
+        color: #94a3b8;
+    }
+
+    .exam-button {
+        display: inline-block;
+        padding: 12px 22px;
+        background: #7c3aed;
+        color: white;
+        text-decoration: none;
+        border-radius: 10px;
+        font-weight: 700;
+    }
+
+    .empty-message {
+        padding: 30px;
+        text-align: center;
+        background: #0f1b2d;
+        border-radius: 15px;
+        color: #94a3b8;
+    }
+
+    @media (max-width: 700px) {
+
+        .course-page {
+            padding: 25px 14px 45px;
+        }
+
+        .course-header {
+            padding: 25px;
+        }
+
+        .course-header h1 {
+            font-size: 27px;
+        }
+
+        .lesson-card {
+            align-items: flex-start;
+        }
+
+        .lesson-button {
+            padding: 9px 13px;
+        }
+
+        .lesson-info h3 {
+            font-size: 15px;
+        }
+    }
+</style>
+
+
+<div class="course-page">
+
+    <!-- COURSE HEADER -->
+
+    <div class="course-header">
+
+        <div class="course-icon">
+            {{ language[1] }}
+        </div>
+
+        <h1>
+            {{ language[0] }}
+        </h1>
+
+        <p>
+            {{ language[2] }}
+        </p>
+
+    </div>
+
+
+    <!-- LESSONS -->
+
+    <h2 class="lessons-title">
+        Course Lessons
+    </h2>
+
+    <div class="lessons-list">
+
+        {% for lesson_name in lessons %}
+
+            <div class="lesson-card">
+
+                <div class="lesson-left">
+
+                    <div class="lesson-number">
+                        {{ loop.index }}
+                    </div>
+
+                    <div class="lesson-info">
+
+                        <h3>
+                            {{ lesson_name }}
+                        </h3>
+
+                        {% if loop.index0 in completed_lessons %}
+
+                            <span class="lesson-status completed-status">
+                                ✓ Completed
+                            </span>
+
+                        {% else %}
+
+                            <span class="lesson-status pending-status">
+                                Not completed
+                            </span>
+
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+
+                <a
+                    href="{{ url_for(
+                        'lesson',
+                        slug=slug,
+                        lesson_id=loop.index0
+                    ) }}"
+                    class="lesson-button
+                    {% if loop.index0 in completed_lessons %}
+                        completed-button
+                    {% endif %}"
+                >
+
+                    {% if loop.index0 in completed_lessons %}
+                        Review
+                    {% else %}
+                        Start Lesson
+                    {% endif %}
+
+                </a>
+
+            </div>
+
+        {% else %}
+
+            <div class="empty-message">
+                No lessons are available for this course yet.
+            </div>
+
+        {% endfor %}
+
+    </div>
+
+
+    <!-- EXAM -->
+
+    <div class="exam-box">
+
+        <h2>
+            Course Exam
+        </h2>
+
+        <p>
+            Test your knowledge after completing the lessons.
+        </p>
+
+        <a
+            href="{{ url_for('exam', slug=slug) }}"
+            class="exam-button"
+        >
+            Take Exam
+        </a>
+
+    </div>
+
+</div>
+
+{% endblock %}

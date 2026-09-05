@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="hero">
+  <div class="hero-text">
+    <div class="pill">🚀 Learn Programming Smarter</div>
+    <h1>Turn your curiosity<br>into <span>coding skills.</span></h1>
+    <p>STUDYHUB helps students learn programming languages, track progress, practice and test their knowledge — all in one place.</p>
+    <div class="actions">
+      <a class="btn" href="{{ url_for('signup') }}">Start Learning →</a>
+      <a class="btn ghost" href="#languages">Explore Languages</a>
+    </div>
+  </div>
+  <div class="hero-card">
+    <div class="code-head"><span>●</span><span>●</span><span>●</span></div>
+    <pre><code>def learn():
+    skills = ["Python", "C++", "Java"]
+    for skill in skills:
+        practice(skill)
+        take_exam(skill)
+
+learn()</code></pre>
+    <div class="code-status">✓ Keep learning. Keep growing.</div>
+  </div>
+</section>
+<section id="languages" class="section">
+  <div class="section-title"><span>COURSES</span><h2>Choose your language</h2><p>Learn step-by-step and track your completion.</p></div>
+  <div class="grid">
+    {% for name, icon, desc, slug in languages %}
+    <a class="lang-card" href="{{ url_for('course', slug=slug) if session.get('user_id') else url_for('signin') }}">
+      <div class="lang-icon">{{ icon }}</div><h3>{{ name }}</h3><p>{{ desc }}</p><span>Start learning →</span>
+    </a>
+    {% endfor %}
+  </div>
+</section>
+<section class="features">
+  <div><b>📚 Learn</b><p>Structured lessons for each language.</p></div>
+  <div><b>📊 Track</b><p>See exactly how much you have completed.</p></div>
+  <div><b>📝 Test</b><p>Take exams and prove your skills.</p></div>
+</section>
+{% endblock %}

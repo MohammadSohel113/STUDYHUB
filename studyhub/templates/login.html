@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}Login — STUDY HUB{% endblock %}
+{% block content %}
+<div class="auth-wrap">
+  <div class="auth-side">
+    <div>
+      <div class="brand" style="margin-bottom:60px;">
+        <span class="brand-mark">SH</span>
+        <span class="brand-name" style="color:#fff;">STUDY HUB</span>
+      </div>
+      <h2>Pick up right where you left off.</h2>
+      <p>Your lessons, progress, and certificates are all waiting for you.</p>
+    </div>
+    <p class="quote">"The best way to learn to code is to keep coding, one small lesson at a time."</p>
+  </div>
+  <div class="auth-form-col">
+    <div class="auth-box">
+      <h1>Welcome back</h1>
+      <p>Log in to continue learning.</p>
+      <form method="POST" action="{{ url_for('login') }}">
+        <div class="field">
+          <label for="identifier">Email or Username</label>
+          <input type="text" id="identifier" name="identifier" required autofocus>
+        </div>
+        <div class="field">
+          <label for="password">Password</label>
+          <input type="password" id="password" name="password" required>
+        </div>
+        <button type="submit" class="btn btn-primary btn-block">Log In</button>
+      </form>
+      <p class="auth-foot">Don't have an account? <a href="{{ url_for('signup') }}">Sign up free</a></p>
+      <p class="auth-foot" style="margin-top:6px;"><a href="{{ url_for('admin_login') }}" style="color:var(--text-muted);">Admin login →</a></p>
+    </div>
+  </div>
+</div>
+{% endblock %}

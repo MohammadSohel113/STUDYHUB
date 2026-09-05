@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Profile — STUDY HUB{% endblock %}
+{% block content %}
+<section class="page-hero">
+  <div class="container">
+    <span class="section-kicker">Your profile</span>
+    <h1>{{ current_user.full_name }}</h1>
+  </div>
+</section>
+<section class="section-tight">
+  <div class="container">
+    <div class="dash-grid">
+      <div class="card panel">
+        <h3>Account details</h3>
+        <p><strong style="color:var(--text-primary);">Full name:</strong> {{ current_user.full_name }}</p>
+        <p><strong style="color:var(--text-primary);">Username:</strong> {{ current_user.username }}</p>
+        <p><strong style="color:var(--text-primary);">Email:</strong> {{ current_user.email }}</p>
+        <p><strong style="color:var(--text-primary);">Member since:</strong> {{ current_user.created_at.strftime('%B %d, %Y') }}</p>
+      </div>
+      <div class="card panel">
+        <h3>Learning stats</h3>
+        <p><strong style="color:var(--text-primary);">{{ total_completed }}</strong> lessons completed</p>
+        <p><strong style="color:var(--text-primary);">{{ attempts }}</strong> quizzes &amp; exams attempted</p>
+        <p><strong style="color:var(--text-primary);">{{ certificates|length }}</strong> certificates earned</p>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

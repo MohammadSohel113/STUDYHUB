@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% block title %}Dashboard — STUDY HUB{% endblock %}
+{% block content %}
+
+<section class="dash-hero">
+  <div class="container">
+    <h1>Welcome back, {{ current_user.full_name.split(' ')[0] }} 👋</h1>
+    <p>Here's where you left off.</p>
+  </div>
+</section>
+
+<section class="section-tight">
+  <div class="container">
+
+    <div class="stat-cards">
+      <div class="card stat-card"><div class="stat-num">{{ total_completed }}</div><div class="stat-label">Lessons completed</div></div>
+      <div class="card stat-card"><div class="stat-num">{{ attempts|length }}</div><div class="stat-label">Recent quiz attempts</div></div>
+      <div class="card stat-card"><div class="stat-num">{{ certificates|length }}</div><div class="stat-label">Certificates earned</div></div>
+      <div class="card stat-card"><div class="stat-num">{{ course_progress|length }}</div><div class="stat-label">Courses in progress</div></div>
+    </div>
+
+    {% if continue_lesson %}
+    <div class="card continue-card" style="margin-bottom:36px;">
+      <div>
+        <div class="label">Continue Learning</div>
+        <h3>{{ continue_lesson.title }}</h3>
+        <p>{{ continue_lesson.chapter.course.name }} · {{ continue_lesson.chapter.title }}</p>
+      </div>
+      <a href="{{ url_for('lesson_view', lesson_id=continue_lesson.id) }}" class="btn btn-primary">Continue →</a>
+    </div>
+    {% endif %}
+
+    <div class="dash-grid">
+      <div>
+        <div class="card panel">
+          <h3>Your progress</h3>
+          {% for course, pct in course_progress %}
+          <div class="course-progress-item">
+            <div class="top-row"><span>{{ course.icon }} {{ course.name }}</span><span>{{ pct }}%</span></div>
+            <div class="progress-track"><div class="progress-fill" style="width:{{ pct }}%;"></div></div>
+          </div>
+          {% else %}
+          <div class="empty-state"><div class="emoji">📚</div><p>You haven't started a course yet.</p><a href="{{ url_for('courses') }}" class="btn btn-secondary btn-sm">Browse courses</a></div>
+          {% endfor %}
+        </div>
+
+        <div class="card panel">
+          <h3>Recent quiz &amp; exam scores</h3>
+          {% for a in attempts %}
+          <div class="attempt-row">
+            <span>{{ a.quiz.title }}</span>
+            <span style="display:flex; align-items:center; gap:10px;">
+              {{ a.score }}%
+              <span class="{{ 'pass-pill' if a.passed else 'fail-pill' }}">{{ 'Passed' if a.passed else 'Failed' }}</span>
+            </span>
+          </div>
+          {% else %}
+          <div class="empty-state"><div class="emoji">📝</div><p>No quiz attempts yet.</p></div>
+          {% endfor %}
+        </div>
+      </div>
+
+      <div>
+        <div class="card panel">
+          <h3>Certificates</h3>
+          {% for c in certificates %}
+          <div class="cert-row">
+            <span>{{ c.course.name }}</span>
+            <a href="{{ url_for('certificate_view', code=c.code) }}" style="color:var(--accent); font-weight:600;">View →</a>
+          </div>
+          {% else %}
+          <div class="empty-state"><div class="emoji">🏅</div><p>Complete a course &amp; final exam to earn one.</p></div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+{% endblock %}

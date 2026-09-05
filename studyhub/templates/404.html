@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block title %}Page Not Found — STUDY HUB{% endblock %}
+{% block content %}
+<div class="error-page">
+  <div class="code">404</div>
+  <h2>This page doesn't exist</h2>
+  <p>The lesson, course, or page you're looking for may have moved.</p>
+  <a href="{{ url_for('index') }}" class="btn btn-primary">Back to Home</a>
+</div>
+{% endblock %}

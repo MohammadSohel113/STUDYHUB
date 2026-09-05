@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+{% block title %}{{ course.name }} — STUDY HUB{% endblock %}
+{% block content %}
+
+<section class="course-hero">
+  <div class="container">
+    <div class="course-hero-top">
+      <div class="course-icon">{{ course.icon }}</div>
+      <div>
+        <h1 style="margin-bottom:4px;">{{ course.name }}</h1>
+        <p style="margin:0;">{{ course.tagline }}</p>
+      </div>
+    </div>
+    <p style="max-width:640px;">{{ course.description }}</p>
+
+    {% if progress_pct is not none %}
+    <div style="max-width:420px; margin-top:20px;">
+      <div class="progress-row">
+        <div class="progress-track"><div class="progress-fill" style="width: {{ progress_pct }}%;"></div></div>
+        <span class="pct">{{ progress_pct }}%</span>
+      </div>
+    </div>
+    {% else %}
+    <a href="{{ url_for('signup') }}" class="btn btn-primary" style="margin-top:10px;">Start Learning</a>
+    {% endif %}
+
+    {% set exam = course.final_exam() %}
+    {% if exam %}
+    <p style="margin-top:16px; font-size:0.85rem;">
+      <a href="{{ url_for('quiz_view', quiz_id=exam.id) }}" style="color:var(--accent); font-weight:600;">Take the final exam →</a>
+    </p>
+    {% endif %}
+  </div>
+</section>
+
+<section class="section-tight">
+  <div class="container">
+    <div class="level-tabs" id="levelTabs">
+      {% for lvl in levels %}
+        {% if course.chapters_for_level(lvl) %}
+        <a href="#{{ lvl }}" class="level-tab js-level-tab {{ 'active' if loop.first }}" data-level="{{ lvl }}">{{ lvl }}</a>
+        {% endif %}
+      {% endfor %}
+    </div>
+
+    {% for lvl in levels %}
+      {% set chapters = course.chapters_for_level(lvl) %}
+      {% if chapters %}
+      <div class="level-panel" id="{{ lvl }}" data-level-panel="{{ lvl }}">
+        {% for chapter in chapters %}
+        <div class="chapter-block">
+          <h4>{{ loop.index }}. {{ chapter.title }}</h4>
+          {% for lesson in chapter.lessons %}
+          <a href="{{ url_for('lesson_view', lesson_id=lesson.id) }}" class="lesson-row">
+            <span class="lesson-check {{ 'done' if lesson.id in completed_lesson_ids }}">{{ '✓' if lesson.id in completed_lesson_ids }}</span>
+            <span class="lesson-title">{{ lesson.title }}</span>
+            <span class="lesson-num">{{ '%02d'|format(loop.index) }}</span>
+          </a>
+          {% else %}
+          <p style="font-size:0.85rem;">Lessons for this chapter are coming soon.</p>
+          {% endfor %}
+          {% if chapter.quiz %}
+          <a href="{{ url_for('quiz_view', quiz_id=chapter.quiz.id) }}" class="lesson-row" style="border-style:dashed;">
+            <span class="lesson-check">📝</span>
+            <span class="lesson-title">Chapter Quiz: {{ chapter.quiz.title }}</span>
+            <span class="lesson-num">Quiz</span>
+          </a>
+          {% endif %}
+        </div>
+        {% endfor %}
+      </div>
+      {% endif %}
+    {% endfor %}
+  </div>
+</section>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+  document.querySelectorAll(".js-level-tab").forEach(function (tab) {
+    tab.addEventListener("click", function (e) {
+      e.preventDefault();
+      document.querySelectorAll(".js-level-tab").forEach(function (t) { t.classList.remove("active"); });
+      document.querySelectorAll(".level-panel").forEach(function (p) { p.style.display = "none"; });
+      tab.classList.add("active");
+      document.querySelector('[data-level-panel="' + tab.dataset.level + '"]').style.display = "block";
+    });
+  });
+  // show first level panel only, by default
+  var panels = document.querySelectorAll(".level-panel");
+  panels.forEach(function (p, i) { p.style.display = i === 0 ? "block" : "none"; });
+</script>
+{% endblock %}

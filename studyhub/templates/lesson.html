@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+{% block title %}{{ lesson.title }} — {{ course.name }} — STUDY HUB{% endblock %}
+{% block content %}
+<div class="container lesson-wrap">
+  <div>
+    <div class="lesson-crumb">
+      <a href="{{ url_for('course_detail', slug=course.slug) }}">{{ course.name }}</a> / {{ lesson.chapter.title }}
+    </div>
+    <div class="lesson-header">
+      <h1>{{ lesson.title }}</h1>
+    </div>
+
+    {% if lesson.explanation %}
+    <div class="lesson-block">
+      <h3>Explanation</h3>
+      <p class="lesson-body-text">{{ lesson.explanation }}</p>
+    </div>
+    {% endif %}
+
+    {% if lesson.syntax %}
+    <div class="lesson-block">
+      <h3>Syntax</h3>
+      <div class="code-block">
+        <div class="code-bar"><span>Syntax</span></div>
+        <pre>{{ lesson.syntax }}</pre>
+      </div>
+    </div>
+    {% endif %}
+
+    {% if lesson.code_example %}
+    <div class="lesson-block">
+      <h3>Code Example</h3>
+      <div class="code-block">
+        <div class="code-bar">
+          <span>example.code</span>
+          <button class="copy-btn" data-target="code-{{ lesson.id }}">⧉ Copy</button>
+        </div>
+        <pre id="code-{{ lesson.id }}">{{ lesson.code_example }}</pre>
+      </div>
+    </div>
+    {% endif %}
+
+    {% if lesson.output_example %}
+    <div class="lesson-block">
+      <h3>Output</h3>
+      <div class="output-block"><span class="label">Console Output</span>{{ lesson.output_example }}</div>
+    </div>
+    {% endif %}
+
+    {% if lesson.notes %}
+    <div class="lesson-block">
+      <h3>Important Notes</h3>
+      <div class="note-box"><strong>💡 Keep in mind</strong>{{ lesson.notes }}</div>
+    </div>
+    {% endif %}
+
+    {% if lesson.common_mistakes %}
+    <div class="lesson-block">
+      <h3>Common Mistakes</h3>
+      <div class="mistake-box"><strong>⚠️ Watch out for</strong>{{ lesson.common_mistakes }}</div>
+    </div>
+    {% endif %}
+
+    {% if lesson.practice_list() %}
+    <div class="lesson-block">
+      <h3>Practice Questions</h3>
+      <ul class="practice-list">
+        {% for q in lesson.practice_list() %}
+        <li><span class="qn">Q{{ loop.index }}.</span> {{ q }}</li>
+        {% endfor %}
+      </ul>
+    </div>
+    {% endif %}
+
+    <div class="lesson-nav">
+      {% set prev = lesson.previous_lesson() %}
+      {% if prev %}
+      <a href="{{ url_for('lesson_view', lesson_id=prev.id) }}" class="btn btn-secondary">← Previous</a>
+      {% else %}<span></span>{% endif %}
+
+      <form method="POST" action="{{ url_for('lesson_complete', lesson_id=lesson.id) }}">
+        <button type="submit" class="btn btn-primary">{{ '✓ Completed — Next' if completed else 'Mark as Completed' }}</button>
+      </form>
+    </div>
+  </div>
+
+  <aside class="lesson-sidebar">
+    <div class="card sidebar-card">
+      <h4>{{ course.name }}</h4>
+      <p style="font-size:0.85rem; margin:0;">{{ lesson.chapter.title }}</p>
+    </div>
+    <div class="card sidebar-card">
+      <h4>In this chapter</h4>
+      <ul class="mini-list">
+        {% for l in lesson.chapter.lessons %}
+        <li>
+          <a href="{{ url_for('lesson_view', lesson_id=l.id) }}" style="{{ 'color:var(--accent); font-weight:600;' if l.id == lesson.id else '' }}">{{ l.title }}</a>
+          {% if current_user.is_authenticated and current_user.has_completed_lesson(l.id) %}<span style="color:var(--accent-2);">✓</span>{% endif %}
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </aside>
+</div>
+{% endblock %}

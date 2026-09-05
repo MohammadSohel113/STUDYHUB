@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %}{{ student.full_name }} — Admin — STUDY HUB{% endblock %}
+{% block content %}
+<div class="container admin-shell">
+  <div class="admin-head">
+    <div>
+      <h1>{{ student.full_name }}</h1>
+      <p style="margin:0;">{{ student.username }} · {{ student.email }} · joined {{ student.created_at.strftime('%b %d, %Y') }}</p>
+    </div>
+    <a href="{{ url_for('admin_students') }}" class="btn btn-secondary btn-sm">← All students</a>
+  </div>
+
+  <div class="dash-grid">
+    <div class="card admin-panel">
+      <h3>Course progress</h3>
+      {% for course, pct in course_progress %}
+      <div class="course-progress-item">
+        <div class="top-row"><span>{{ course.icon }} {{ course.name }}</span><span>{{ pct }}%</span></div>
+        <div class="progress-track"><div class="progress-fill" style="width:{{ pct }}%;"></div></div>
+      </div>
+      {% endfor %}
+    </div>
+
+    <div>
+      <div class="card admin-panel">
+        <h3>Quiz &amp; exam scores</h3>
+        {% for a in attempts %}
+        <div class="attempt-row">
+          <span>{{ a.quiz.title }}</span>
+          <span>{{ a.score }}% <span class="{{ 'pass-pill' if a.passed else 'fail-pill' }}">{{ 'Passed' if a.passed else 'Failed' }}</span></span>
+        </div>
+        {% else %}
+        <p style="font-size:0.85rem;">No attempts yet.</p>
+        {% endfor %}
+      </div>
+      <div class="card admin-panel">
+        <h3>Certificates</h3>
+        {% for c in certs %}
+        <div class="cert-row"><span>{{ c.course.name }}</span><span>{{ c.code }}</span></div>
+        {% else %}
+        <p style="font-size:0.85rem;">None yet.</p>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

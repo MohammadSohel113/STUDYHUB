@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}{{ quiz.title }} — Admin — STUDY HUB{% endblock %}
+{% block content %}
+<div class="container admin-shell">
+  <div class="admin-head">
+    <div><h1>{{ quiz.title }}</h1><p style="margin:0; text-transform:capitalize;">{{ quiz.kind }} · pass at {{ quiz.pass_percent }}%</p></div>
+    <a href="{{ url_for('admin_quizzes') }}" class="btn btn-secondary btn-sm">← All quizzes</a>
+  </div>
+
+  <div class="card admin-panel">
+    <h3>Add a question</h3>
+    <form method="POST" action="{{ url_for('admin_question_add', quiz_id=quiz.id) }}">
+      <div class="field"><label>Question Text</label><textarea name="text" rows="2" required></textarea></div>
+      <div class="field-row">
+        <div class="field"><label>Option 1</label><input type="text" name="option1" required></div>
+        <div class="field"><label>Option 2</label><input type="text" name="option2" required></div>
+      </div>
+      <div class="field-row">
+        <div class="field"><label>Option 3</label><input type="text" name="option3"></div>
+        <div class="field"><label>Option 4</label><input type="text" name="option4"></div>
+      </div>
+      <div class="field">
+        <label>Correct Option</label>
+        <select name="correct_index">
+          <option value="0">Option 1</option>
+          <option value="1">Option 2</option>
+          <option value="2">Option 3</option>
+          <option value="3">Option 4</option>
+        </select>
+      </div>
+      <button type="submit" class="btn btn-primary">Add Question</button>
+    </form>
+  </div>
+
+  {% for q in quiz.questions %}
+  <div class="chapter-admin-block">
+    <div class="chdr">
+      <strong>{{ loop.index }}. {{ q.text }}</strong>
+      <form method="POST" action="{{ url_for('admin_question_delete', question_id=q.id) }}" class="inline-form" onsubmit="return confirm('Delete this question?');">
+        <button type="submit" class="btn btn-ghost btn-sm" style="color:var(--danger);">Delete</button>
+      </form>
+    </div>
+    <ul class="mini-list">
+      {% for c in q.choices %}
+      <li>{{ c.text }} {% if c.is_correct %}<span style="color:var(--accent-2); font-weight:600;">✓ correct</span>{% endif %}</li>
+      {% endfor %}
+    </ul>
+  </div>
+  {% else %}
+  <p style="color:var(--text-muted);">No questions yet — add some above.</p>
+  {% endfor %}
+</div>
+{% endblock %}

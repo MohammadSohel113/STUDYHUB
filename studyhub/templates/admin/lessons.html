@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block title %}{{ chapter.title }} Lessons — Admin — STUDY HUB{% endblock %}
+{% block content %}
+<div class="container admin-shell">
+  <div class="admin-head">
+    <div><h1>{{ chapter.title }}</h1><p style="margin:0;">{{ chapter.course.name }} · {{ chapter.level|capitalize }}</p></div>
+    <a href="{{ url_for('admin_chapters', course_id=chapter.course_id) }}" class="btn btn-secondary btn-sm">← Back to chapters</a>
+  </div>
+
+  <div class="card admin-panel">
+    <h3>Add a lesson</h3>
+    <form method="POST" action="{{ url_for('admin_lesson_add', chapter_id=chapter.id) }}">
+      <div class="field"><label>Lesson Title</label><input type="text" name="title" required></div>
+      <div class="field"><label>Explanation</label><textarea name="explanation" rows="3"></textarea></div>
+      <div class="field-row">
+        <div class="field"><label>Syntax</label><textarea name="syntax" rows="3"></textarea></div>
+        <div class="field"><label>Code Example</label><textarea name="code_example" rows="3"></textarea></div>
+      </div>
+      <div class="field"><label>Output Example</label><textarea name="output_example" rows="2"></textarea></div>
+      <div class="field-row">
+        <div class="field"><label>Important Notes</label><textarea name="notes" rows="2"></textarea></div>
+        <div class="field"><label>Common Mistakes</label><textarea name="common_mistakes" rows="2"></textarea></div>
+      </div>
+      <div class="field"><label>Practice Questions (one per line)</label><textarea name="practice_questions" rows="3"></textarea></div>
+      <button type="submit" class="btn btn-primary">Add Lesson</button>
+    </form>
+  </div>
+
+  <table class="admin-table">
+    <thead><tr><th>#</th><th>Lesson</th><th></th></tr></thead>
+    <tbody>
+      {% for lesson in chapter.lessons %}
+      <tr>
+        <td>{{ loop.index }}</td>
+        <td>{{ lesson.title }}</td>
+        <td class="row-actions">
+          <a href="{{ url_for('lesson_view', lesson_id=lesson.id) }}" class="btn btn-ghost btn-sm">Preview →</a>
+          <form method="POST" action="{{ url_for('admin_lesson_delete', lesson_id=lesson.id) }}" class="inline-form" onsubmit="return confirm('Delete this lesson?');">
+            <button type="submit" class="btn btn-ghost btn-sm" style="color:var(--danger);">Delete</button>
+          </form>
+        </td>
+      </tr>
+      {% else %}
+      <tr><td colspan="3">No lessons yet.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

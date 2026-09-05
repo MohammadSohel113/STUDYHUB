@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}Admin Login — STUDY HUB{% endblock %}
+{% block content %}
+<div class="auth-wrap">
+  <div class="auth-side">
+    <div>
+      <div class="brand" style="margin-bottom:60px;">
+        <span class="brand-mark">SH</span>
+        <span class="brand-name" style="color:#fff;">STUDY HUB</span>
+      </div>
+      <h2>Admin Control Center</h2>
+      <p>Manage students, courses, lessons, and quizzes across the whole platform.</p>
+    </div>
+    <p class="quote">Admin accounts are created by the platform owner only — there is no public admin sign-up.</p>
+  </div>
+  <div class="auth-form-col">
+    <div class="auth-box">
+      <h1>Admin Login</h1>
+      <p>Sign in with your administrator credentials.</p>
+      <form method="POST" action="{{ url_for('admin_login') }}">
+        <div class="field">
+          <label for="username">Username</label>
+          <input type="text" id="username" name="username" required autofocus>
+        </div>
+        <div class="field">
+          <label for="password">Password</label>
+          <input type="password" id="password" name="password" required>
+        </div>
+        <button type="submit" class="btn btn-primary btn-block">Log In</button>
+      </form>
+      <p class="auth-foot"><a href="{{ url_for('login') }}" style="color:var(--text-muted);">← Back to student login</a></p>
+    </div>
+  </div>
+</div>
+{% endblock %}

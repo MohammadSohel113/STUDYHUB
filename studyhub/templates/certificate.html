@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}Certificate — {{ cert.course.name }} — STUDY HUB{% endblock %}
+{% block content %}
+<div class="container">
+  <div class="certificate">
+    <div class="cert-logo">🧭 STUDY HUB</div>
+    <div class="cert-kicker">Certificate of Completion</div>
+    <p class="cert-desc">This certifies that</p>
+    <div class="cert-name">{{ cert.student.full_name }}</div>
+    <p class="cert-desc">has successfully completed the course</p>
+    <div class="cert-course">{{ cert.course.icon }} {{ cert.course.name }}</div>
+    <div class="cert-meta">
+      <div>Completion Date<b>{{ cert.issued_at.strftime('%B %d, %Y') }}</b></div>
+      <div>Certificate ID<b>{{ cert.code }}</b></div>
+    </div>
+  </div>
+  <div style="text-align:center; margin-bottom:60px;">
+    <button onclick="window.print()" class="btn btn-secondary">🖨️ Print / Save as PDF</button>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}Courses — STUDY HUB{% endblock %}
+{% block content %}
+<section class="page-hero">
+  <div class="container">
+    <span class="section-kicker">All courses</span>
+    <h1>Every language, one clear path</h1>
+    <p style="max-width:560px;">Beginner-friendly courses covering the languages and fundamentals you need to become a confident programmer.</p>
+  </div>
+</section>
+
+<section class="section-tight">
+  <div class="container">
+    <div class="grid grid-4">
+      {% for course in courses %}
+      <a href="{{ url_for('course_detail', slug=course.slug) }}" class="card course-card">
+        <div class="course-icon">{{ course.icon }}</div>
+        <div>
+          <h3>{{ course.name }}</h3>
+          <p class="tagline">{{ course.tagline }}</p>
+        </div>
+        <div class="course-meta">
+          <span>{{ course.lesson_count() }} lessons</span>
+          <span>{{ course.chapters|length }} chapters</span>
+        </div>
+        <div class="cta-row">
+          <div class="level-badges">
+            {% for lvl in ['beginner','intermediate','advanced'] %}
+              {% if course.chapters_for_level(lvl) %}<span class="badge {{ lvl }}">{{ lvl }}</span>{% endif %}
+            {% endfor %}
+          </div>
+        </div>
+      </a>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endblock %}

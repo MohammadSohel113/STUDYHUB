@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}{{ quiz.title }} — STUDY HUB{% endblock %}
+{% block content %}
+<div class="quiz-wrap">
+  <div class="quiz-header">
+    <span class="section-kicker">{{ 'Final Exam' if quiz.kind == 'exam' else 'Chapter Quiz' }}</span>
+    <h1>{{ quiz.title }}</h1>
+    <p>{{ quiz.questions|length }} questions · pass with {{ quiz.pass_percent }}% or higher</p>
+  </div>
+
+  <form method="POST" id="quizForm">
+    {% for q in quiz.questions %}
+    <div class="card question-card">
+      <div class="qtext">{{ loop.index }}. {{ q.text }}</div>
+      <div data-question-group>
+        {% for choice in q.choices %}
+        <div class="option-row">
+          <input type="radio" name="question-{{ q.id }}" value="{{ choice.id }}" id="choice-{{ choice.id }}">
+          <label for="choice-{{ choice.id }}">{{ choice.text }}</label>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+    {% endfor %}
+    <button type="submit" class="btn btn-primary btn-block">Submit {{ 'Exam' if quiz.kind == 'exam' else 'Quiz' }}</button>
+  </form>
+</div>
+{% endblock %}

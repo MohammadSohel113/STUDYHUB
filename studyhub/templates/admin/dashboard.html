@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}Admin Dashboard — STUDY HUB{% endblock %}
+{% block content %}
+<div class="container admin-shell">
+  <div class="admin-head">
+    <div>
+      <h1>Admin Dashboard</h1>
+      <p style="margin:0;">Welcome back, {{ current_user.username }}.</p>
+    </div>
+  </div>
+
+  <div class="admin-stats">
+    <div class="card admin-stat"><div class="num">{{ stats.students }}</div><div class="lbl">Total Students</div></div>
+    <div class="card admin-stat"><div class="num">{{ stats.courses }}</div><div class="lbl">Total Courses</div></div>
+    <div class="card admin-stat"><div class="num">{{ stats.lessons }}</div><div class="lbl">Total Lessons</div></div>
+    <div class="card admin-stat"><div class="num">{{ stats.attempts }}</div><div class="lbl">Quiz Attempts</div></div>
+    <div class="card admin-stat"><div class="num">{{ stats.certificates }}</div><div class="lbl">Certificates Issued</div></div>
+  </div>
+
+  <div class="card admin-panel">
+    <h3>Recently joined students</h3>
+    <table class="admin-table">
+      <thead><tr><th>Name</th><th>Username</th><th>Email</th><th>Joined</th></tr></thead>
+      <tbody>
+        {% for s in recent_students %}
+        <tr>
+          <td><a href="{{ url_for('admin_student_detail', student_id=s.id) }}">{{ s.full_name }}</a></td>
+          <td>{{ s.username }}</td>
+          <td>{{ s.email }}</td>
+          <td>{{ s.created_at.strftime('%b %d, %Y') }}</td>
+        </tr>
+        {% else %}
+        <tr><td colspan="4">No students yet.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

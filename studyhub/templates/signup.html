@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block title %}Sign Up — STUDY HUB{% endblock %}
+{% block content %}
+<div class="auth-wrap">
+  <div class="auth-side">
+    <div>
+      <div class="brand" style="margin-bottom:60px;">
+        <span class="brand-mark">SH</span>
+        <span class="brand-name" style="color:#fff;">STUDY HUB</span>
+      </div>
+      <h2>Start from zero. Finish job-ready.</h2>
+      <p>Join thousands of learners building real programming skills, one lesson at a time.</p>
+    </div>
+    <p class="quote">"Every expert was once a beginner who didn't give up."</p>
+  </div>
+  <div class="auth-form-col">
+    <div class="auth-box">
+      <h1>Create your account</h1>
+      <p>It's free — start learning in under a minute.</p>
+      <form method="POST" action="{{ url_for('signup') }}">
+        <div class="field">
+          <label for="full_name">Full Name</label>
+          <input type="text" id="full_name" name="full_name" value="{{ form.get('full_name','') }}" required autofocus>
+        </div>
+        <div class="field">
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" value="{{ form.get('email','') }}" required>
+        </div>
+        <div class="field">
+          <label for="username">Username</label>
+          <input type="text" id="username" name="username" value="{{ form.get('username','') }}" required>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" required>
+          </div>
+          <div class="field">
+            <label for="confirm_password">Confirm Password</label>
+            <input type="password" id="confirm_password" name="confirm_password" required>
+          </div>
+        </div>
+        <p class="field-hint" style="margin-bottom:18px;">At least 6 characters.</p>
+        <button type="submit" class="btn btn-primary btn-block">Create Account</button>
+      </form>
+      <p class="auth-foot">Already have an account? <a href="{{ url_for('login') }}">Log in</a></p>
+    </div>
+  </div>
+</div>
+{% endblock %}

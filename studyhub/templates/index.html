@@ -1,0 +1,160 @@
+{% extends "base.html" %}
+{% block title %}STUDY HUB — Learn Programming From Zero to Job-Ready{% endblock %}
+{% block content %}
+
+<section class="hero">
+  <div class="container hero-inner">
+    <div>
+      <span class="eyebrow-pill"><span class="dot"></span> 11 languages · beginner to advanced</span>
+      <h1>Learn programming.<br>Build skills. <span class="grad">Shape your future.</span></h1>
+      <p class="hero-sub">STUDY HUB takes you from your very first line of code to job-ready, ​with structured lessons, hands-on practice, quizzes, and certificates — at your own pace.</p>
+      <div class="hero-actions">
+        <a href="{{ url_for('signup') }}" class="btn btn-primary">Start Learning</a>
+        <a href="{{ url_for('courses') }}" class="btn btn-secondary">Explore Courses</a>
+      </div>
+      <div class="hero-stats">
+        <div class="hero-stat"><b>11</b><span>Programming courses</span></div>
+        <div class="hero-stat"><b>3</b><span>Levels per course</span></div>
+        <div class="hero-stat"><b>100%</b><span>Beginner friendly</span></div>
+      </div>
+    </div>
+
+    <div class="editor-mock">
+      <div class="editor-topbar">
+        <span class="editor-dot r"></span><span class="editor-dot y"></span><span class="editor-dot g"></span>
+        <span class="editor-file">lesson_03_functions.py</span>
+      </div>
+      <div class="editor-body">
+<span class="ln">1</span><span class="kw">def</span> <span class="fn">greet</span>(name):<br>
+<span class="ln">2</span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">return</span> <span class="str">f"Hello, {name}!"</span><br>
+<span class="ln">3</span><br>
+<span class="ln">4</span><span class="cm"># Call the function</span><br>
+<span class="ln">5</span><span class="fn">print</span>(greet(<span class="str">"learner"</span>))<br>
+<span class="ln">6</span><br>
+<span class="ln">7</span><span class="cm"># Output: Hello, learner!</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section-tight">
+  <div class="container">
+    <div class="section-head">
+      <span class="section-kicker">Popular courses</span>
+      <h2>Pick a language, start today</h2>
+      <p>Every course is broken into a clear beginner → intermediate → advanced path.</p>
+    </div>
+    <div class="grid grid-4">
+      {% for course in courses[:8] %}
+      <a href="{{ url_for('course_detail', slug=course.slug) }}" class="card course-card">
+        <div class="course-icon">{{ course.icon }}</div>
+        <div>
+          <h3>{{ course.name }}</h3>
+          <p class="tagline">{{ course.tagline }}</p>
+        </div>
+        <div class="course-meta">
+          <span>{{ course.lesson_count() }} lessons</span>
+          <span>{{ course.chapters|length }} chapters</span>
+        </div>
+      </a>
+      {% endfor %}
+    </div>
+    <div style="text-align:center; margin-top:34px;">
+      <a href="{{ url_for('courses') }}" class="btn btn-secondary">View all courses</a>
+    </div>
+  </div>
+</section>
+
+<section class="alt-bg">
+  <div class="container">
+    <div class="section-head">
+      <span class="section-kicker">Why STUDY HUB</span>
+      <h2>Built the way you actually learn to code</h2>
+    </div>
+    <div class="grid grid-3">
+      <div class="card feature-card">
+        <div class="icon-badge">📘</div>
+        <h3>Clear, beginner-friendly lessons</h3>
+        <p>Every concept explained in plain English, with syntax, examples, and output shown side by side.</p>
+      </div>
+      <div class="card feature-card">
+        <div class="icon-badge">🧪</div>
+        <h3>Practice as you go</h3>
+        <p>Practice questions after every lesson, plus chapter quizzes to check your understanding.</p>
+      </div>
+      <div class="card feature-card">
+        <div class="icon-badge">📈</div>
+        <h3>Track your progress</h3>
+        <p>A personal dashboard shows exactly where you left off and what to learn next.</p>
+      </div>
+      <div class="card feature-card">
+        <div class="icon-badge">🏅</div>
+        <h3>Earn real certificates</h3>
+        <p>Pass the final exam for a course and get a certificate with a unique verification code.</p>
+      </div>
+      <div class="card feature-card">
+        <div class="icon-badge">🌙</div>
+        <h3>Comfortable to read</h3>
+        <p>A polished dark mode and light mode, tuned for long reading and code-heavy pages.</p>
+      </div>
+      <div class="card feature-card">
+        <div class="icon-badge">📱</div>
+        <h3>Learn on any device</h3>
+        <p>A fully responsive layout that works just as well on your phone as your laptop.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <div class="section-head">
+      <span class="section-kicker">Your learning path</span>
+      <h2>From your first line of code to advanced projects</h2>
+    </div>
+    <div class="path-row">
+      <div class="path-step"><span class="step-num">01</span><h4>Beginner</h4><p>Syntax, variables, conditions, loops, functions — the fundamentals.</p></div>
+      <div class="path-step"><span class="step-num">02</span><h4>Intermediate</h4><p>OOP, file handling, error handling, and your first mini projects.</p></div>
+      <div class="path-step"><span class="step-num">03</span><h4>Advanced</h4><p>Data structures, algorithms, and real-world development patterns.</p></div>
+      <div class="path-step"><span class="step-num">04</span><h4>Projects</h4><p>Apply what you learned to hands-on, portfolio-worthy projects.</p></div>
+      <div class="path-step"><span class="step-num">05</span><h4>Certification</h4><p>Pass the final exam and earn a STUDY HUB certificate.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="alt-bg">
+  <div class="container">
+    <div class="section-head">
+      <span class="section-kicker">How it works</span>
+      <h2>Three steps to your first certificate</h2>
+    </div>
+    <div class="how-row" style="max-width:640px;">
+      <div class="how-item">
+        <div class="how-num">1</div>
+        <div><h4>Create your free account</h4><p>Sign up in under a minute — no credit card, no setup.</p></div>
+      </div>
+      <div class="how-item">
+        <div class="how-num">2</div>
+        <div><h4>Work through lessons at your pace</h4><p>Read, practice, mark lessons complete, and take chapter quizzes.</p></div>
+      </div>
+      <div class="how-item">
+        <div class="how-num">3</div>
+        <div><h4>Pass the final exam</h4><p>Earn your certificate and show off what you've learned.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <div class="cta-band">
+      <div>
+        <h2>Ready to write your first program?</h2>
+        <p>Join STUDY HUB today and start your beginner-to-advanced journey — completely free.</p>
+      </div>
+      <a href="{{ url_for('signup') }}" class="btn btn-primary">Create free account</a>
+    </div>
+  </div>
+</section>
+
+{% endblock %}

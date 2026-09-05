@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}Certificates — STUDY HUB{% endblock %}
+{% block content %}
+<section class="page-hero">
+  <div class="container">
+    <span class="section-kicker">Your achievements</span>
+    <h1>Certificates</h1>
+  </div>
+</section>
+<section class="section-tight">
+  <div class="container">
+    <div class="grid grid-3">
+      {% for c in certificates %}
+      <div class="card feature-card">
+        <div class="icon-badge">🏅</div>
+        <h3>{{ c.course.name }}</h3>
+        <p>Issued {{ c.issued_at.strftime('%B %d, %Y') }} · {{ c.code }}</p>
+        <a href="{{ url_for('certificate_view', code=c.code) }}" class="btn btn-secondary btn-sm">View Certificate</a>
+      </div>
+      {% else %}
+      <div class="empty-state" style="grid-column:1/-1;">
+        <div class="emoji">🏅</div>
+        <p>You haven't earned a certificate yet. Pass a course's final exam to get one.</p>
+        <a href="{{ url_for('courses') }}" class="btn btn-primary btn-sm">Browse courses</a>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endblock %}

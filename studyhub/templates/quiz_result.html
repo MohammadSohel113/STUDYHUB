@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Result — {{ quiz.title }} — STUDY HUB{% endblock %}
+{% block content %}
+<div class="result-hero">
+  <div class="result-ring {{ 'pass' if passed else 'fail' }}">{{ score }}%</div>
+  <h1>{{ 'You passed! 🎉' if passed else 'Not quite — try again' }}</h1>
+  <p>You answered {{ correct }} out of {{ total }} questions correctly on <strong style="color:var(--text-primary);">{{ quiz.title }}</strong>.</p>
+
+  {% if passed and quiz.kind == 'exam' %}
+  <p style="color:var(--accent-2); font-weight:600;">Your certificate has been generated — check your dashboard!</p>
+  {% endif %}
+
+  <div style="display:flex; gap:12px; justify-content:center; margin-top:20px; flex-wrap:wrap;">
+    <a href="{{ url_for('quiz_view', quiz_id=quiz.id) }}" class="btn btn-secondary">Retake {{ 'Exam' if quiz.kind == 'exam' else 'Quiz' }}</a>
+    <a href="{{ url_for('dashboard') }}" class="btn btn-primary">Go to Dashboard</a>
+  </div>
+</div>
+{% endblock %}

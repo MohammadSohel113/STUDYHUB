@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}{{ course.name }} Chapters — Admin — STUDY HUB{% endblock %}
+{% block content %}
+<div class="container admin-shell">
+  <div class="admin-head">
+    <div><h1>{{ course.icon }} {{ course.name }}</h1><p style="margin:0;">Manage chapters and lessons.</p></div>
+    <a href="{{ url_for('admin_courses') }}" class="btn btn-secondary btn-sm">← All courses</a>
+  </div>
+
+  <div class="card admin-panel">
+    <h3>Add a chapter</h3>
+    <form method="POST" action="{{ url_for('admin_chapter_add', course_id=course.id) }}">
+      <div class="field-row">
+        <div class="field"><label>Chapter Title</label><input type="text" name="title" required></div>
+        <div class="field">
+          <label>Level</label>
+          <select name="level">
+            {% for lvl in levels %}<option value="{{ lvl }}">{{ lvl|capitalize }}</option>{% endfor %}
+          </select>
+        </div>
+      </div>
+      <button type="submit" class="btn btn-primary">Add Chapter</button>
+    </form>
+  </div>
+
+  {% for lvl in levels %}
+    {% set chapters = course.chapters_for_level(lvl) %}
+    {% if chapters %}
+    <h3 style="margin:26px 0 12px; text-transform:capitalize;">{{ lvl }}</h3>
+    {% for chapter in chapters %}
+    <div class="chapter-admin-block">
+      <div class="chdr">
+        <strong>{{ chapter.title }}</strong>
+        <div class="row-actions">
+          <a href="{{ url_for('admin_lessons', chapter_id=chapter.id) }}" class="btn btn-ghost btn-sm">Manage Lessons ({{ chapter.lessons|length }}) →</a>
+          <form method="POST" action="{{ url_for('admin_chapter_delete', chapter_id=chapter.id) }}" class="inline-form" onsubmit="return confirm('Delete this chapter and its lessons?');">
+            <button type="submit" class="btn btn-ghost btn-sm" style="color:var(--danger);">Delete</button>
+          </form>
+        </div>
+      </div>
+      <ul class="mini-list">
+        {% for lesson in chapter.lessons %}
+        <li>{{ lesson.title }}</li>
+        {% else %}
+        <li style="color:var(--text-muted);">No lessons yet.</li>
+        {% endfor %}
+      </ul>
+    </div>
+    {% endfor %}
+    {% endif %}
+  {% endfor %}
+</div>
+{% endblock %}

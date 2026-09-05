@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% block title %}Quizzes — Admin — STUDY HUB{% endblock %}
+{% block content %}
+<div class="container admin-shell">
+  <div class="admin-head"><h1>Quizzes &amp; Exams</h1></div>
+
+  <div class="card admin-panel">
+    <h3>Create a quiz or final exam</h3>
+    <form method="POST" action="{{ url_for('admin_quiz_add') }}">
+      <div class="field"><label>Title</label><input type="text" name="title" required></div>
+      <div class="field-row">
+        <div class="field">
+          <label>Type</label>
+          <select name="kind">
+            <option value="quiz">Chapter Quiz</option>
+            <option value="exam">Final Exam (unlocks certificate)</option>
+          </select>
+        </div>
+        <div class="field"><label>Pass Percent</label><input type="number" name="pass_percent" value="60" min="1" max="100"></div>
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label>Attach to Course (for final exams)</label>
+          <select name="course_id">
+            <option value="">— none —</option>
+            {% for c in courses %}<option value="{{ c.id }}">{{ c.name }}</option>{% endfor %}
+          </select>
+        </div>
+        <div class="field">
+          <label>Attach to Chapter (for chapter quizzes)</label>
+          <select name="chapter_id">
+            <option value="">— none —</option>
+            {% for c in courses %}
+              {% for ch in c.chapters %}<option value="{{ ch.id }}">{{ c.name }} — {{ ch.title }}</option>{% endfor %}
+            {% endfor %}
+          </select>
+        </div>
+      </div>
+      <button type="submit" class="btn btn-primary">Create Quiz</button>
+    </form>
+  </div>
+
+  <table class="admin-table">
+    <thead><tr><th>Title</th><th>Type</th><th>Questions</th><th>Pass %</th><th></th></tr></thead>
+    <tbody>
+      {% for q in quizzes %}
+      <tr>
+        <td>{{ q.title }}</td>
+        <td style="text-transform:capitalize;">{{ q.kind }}</td>
+        <td>{{ q.questions|length }}</td>
+        <td>{{ q.pass_percent }}%</td>
+        <td class="row-actions">
+          <a href="{{ url_for('admin_quiz_detail', quiz_id=q.id) }}" class="btn btn-ghost btn-sm">Manage Questions →</a>
+          <form method="POST" action="{{ url_for('admin_quiz_delete', quiz_id=q.id) }}" class="inline-form" onsubmit="return confirm('Delete this quiz?');">
+            <button type="submit" class="btn btn-ghost btn-sm" style="color:var(--danger);">Delete</button>
+          </form>
+        </td>
+      </tr>
+      {% else %}
+      <tr><td colspan="5">No quizzes yet.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

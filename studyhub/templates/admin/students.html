@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Students — Admin — STUDY HUB{% endblock %}
+{% block content %}
+<div class="container admin-shell">
+  <div class="admin-head"><h1>Students</h1></div>
+
+  <form method="GET" class="search-box">
+    <input type="text" name="q" value="{{ q }}" placeholder="Search by name, email, username" class="field" style="padding:11px 14px; border-radius:8px; border:1px solid var(--border); background:var(--bg-card); color:var(--text-primary); flex:1;">
+    <button type="submit" class="btn btn-secondary">Search</button>
+  </form>
+
+  <table class="admin-table">
+    <thead><tr><th>Name</th><th>Username</th><th>Email</th><th>Joined</th><th></th></tr></thead>
+    <tbody>
+      {% for s in students %}
+      <tr>
+        <td>{{ s.full_name }}</td>
+        <td>{{ s.username }}</td>
+        <td>{{ s.email }}</td>
+        <td>{{ s.created_at.strftime('%b %d, %Y') }}</td>
+        <td><a href="{{ url_for('admin_student_detail', student_id=s.id) }}" class="btn btn-ghost btn-sm">View →</a></td>
+      </tr>
+      {% else %}
+      <tr><td colspan="5">No students found.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}
